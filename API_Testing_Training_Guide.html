@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Testing Training Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 60px 40px;
+        }
+        
+        /* Title Page */
+        .title-page {
+            text-align: center;
+            padding: 100px 0;
+            border-bottom: 3px solid #007bff;
+            margin-bottom: 60px;
+            page-break-after: always;
+        }
+        
+        .title-page h1 {
+            font-size: 48px;
+            color: #007bff;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .title-page p {
+            font-size: 18px;
+            color: #666;
+            margin: 10px 0;
+        }
+        
+        /* Table of Contents */
+        .toc {
+            page-break-after: always;
+            margin-bottom: 60px;
+        }
+        
+        .toc h2 {
+            color: #007bff;
+            font-size: 32px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        
+        .toc ul {
+            list-style: none;
+            margin-left: 0;
+        }
+        
+        .toc li {
+            margin: 12px 0;
+            font-size: 16px;
+        }
+        
+        .toc a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        
+        .toc a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Section Headers */
+        h1 {
+            color: #007bff;
+            font-size: 36px;
+            margin-top: 60px;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 15px;
+            page-break-after: avoid;
+        }
+        
+        h2 {
+            color: #0056b3;
+            font-size: 28px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            page-break-after: avoid;
+        }
+        
+        h3 {
+            color: #333;
+            font-size: 22px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            page-break-after: avoid;
+        }
+        
+        h4 {
+            color: #555;
+            font-size: 18px;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+        
+        /* Paragraphs and Lists */
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        /* Code Blocks */
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.4;
+            page-break-inside: avoid;
+        }
+        
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            page-break-inside: avoid;
+        }
+        
+        th {
+            background-color: #007bff;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            border: 1px solid #ddd;
+            padding: 12px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        tr:hover {
+            background-color: #f0f0f0;
+        }
+        
+        /* Boxes and Highlights */
+        .highlight-box {
+            background-color: #e7f3ff;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin: 20px 0;
+            page-break-inside: avoid;
+        }
+        
+        .highlight-box h4 {
+            margin-top: 0;
+            color: #007bff;
+        }
+        
+        .example-box {
+            background-color: #f0f8ff;
+            border: 1px solid #007bff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            page-break-inside: avoid;
+        }
+        
+        .warning-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            page-break-inside: avoid;
+        }
+        
+        .success-box {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            page-break-inside: avoid;
+        }
+        
+        /* Architecture Diagram */
+        .diagram {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+            font-family: monospace;
+            page-break-inside: avoid;
+            white-space: pre;
+            overflow-x: auto;
+        }
+        
+        /* Comparison Matrix */
+        .matrix {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+            page-break-inside: avoid;
+        }
+        
+        .matrix-item {
+            background-color: #f0f8ff;
+            border: 1px solid #007bff;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        
+        .matrix-item h4 {
+            color: #007bff;
+            margin-top: 0;
+        }
+        
+        /* Checkmarks and Icons */
+        .check {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .cross {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        /* Footer */
+        .footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+            page-break-before: always;
+        }
+        
+        /* Section Break */
+        .section-break {
+            page-break-after: always;
+        }
+        
+        /* Print Styles */
+        @media print {
+            body {
+                background-color: white;
+            }
+            
+            .container {
+                max-width: 100%;
+                padding: 0;
+                margin: 0;
+            }
+            
+            h1, h2 {
+                page-break-after: avoid;
+            }
+            
+            p, li {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Title Page -->
+        <div class="title-page">
+            <h1>API Testing Training Guide</h1>
+            <p style="font-size: 24px; color: #007bff; margin: 30px 0;">Comprehensive Training on API Development and Testing</p>
+            <p><strong>Topics Covered:</strong></p>
+            <p>• What is API<br>
+            • Request and Response<br>
+            • HTTP Methods<br>
+            • HTTP Status Codes<br>
+            • API Testing with Postman</p>
+            <p style="margin-top: 40px; color: #999;">Version 1.0 | 2024</p>
+        </div>
+
+        <!-- Table of Contents -->
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#api-intro">1. What is API</a></li>
+                <li><a href="#request-response">2. Request and Response</a></li>
+                <li><a href="#http-methods">3. HTTP Methods</a></li>
+                <li><a href="#status-codes">4. HTTP Status Codes</a></li>
+                <li><a href="#postman">5. API Testing Tools - Postman</a></li>
+            </ul>
+        </div>
+
+        <!-- Section 1: What is API -->
+        <div id="api-intro">
+            <h1>What is API</h1>
+
+            <h2>Definition</h2>
+            <p>An <strong>API (Application Programming Interface)</strong> is a set of protocols, tools, and definitions for building application software. It specifies how software components should interact and what data they should exchange.</p>
+
+            <div class="highlight-box">
+                <h4>Key Point</h4>
+                <p>APIs are the bridge that allows different software applications to communicate with each other in a standardized way.</p>
+            </div>
+
+            <h2>Key Characteristics</h2>
+
+            <h3>Purpose of APIs</h3>
+            <ul>
+                <li><strong>Communication Bridge:</strong> APIs enable different software applications to communicate with each other</li>
+                <li><strong>Data Exchange:</strong> Allow systems to share data in a standardized format</li>
+                <li><strong>Functionality Access:</strong> Enable access to specific functions or features of an application without exposing the entire system</li>
+                <li><strong>Integration:</strong> Facilitate integration between different systems and platforms</li>
+            </ul>
+
+            <h3>Types of APIs</h3>
+            <h4>Web APIs (Most Common)</h4>
+            <ul>
+                <li><strong>REST APIs:</strong> Representational State Transfer - most popular for web services</li>
+                <li><strong>SOAP APIs:</strong> Simple Object Access Protocol - used in enterprise applications</li>
+                <li><strong>GraphQL APIs:</strong> Query language for APIs with precise data fetching</li>
+                <li><strong>RPC APIs:</strong> Remote Procedure Call - direct function calls over network</li>
+            </ul>
+
+            <h4>Other API Types</h4>
+            <ul>
+                <li>Library-based APIs - Provided by programming languages and frameworks</li>
+                <li>Operating System APIs - Interact with OS functionality</li>
+                <li>Database APIs - Interact with database management systems</li>
+            </ul>
+
+            <h2>Real-World Examples</h2>
+            <table>
+                <tr>
+                    <th>Company</th>
+                    <th>API Name</th>
+                    <th>Purpose</th>
+                </tr>
+                <tr>
+                    <td>Google</td>
+                    <td>Google Maps API</td>
+                    <td>Embed maps in applications</td>
+                </tr>
+                <tr>
+                    <td>Twitter</td>
+                    <td>Twitter API</td>
+                    <td>Access tweets and user data</td>
+                </tr>
+                <tr>
+                    <td>Stripe</td>
+                    <td>Stripe API</td>
+                    <td>Payment processing</td>
+                </tr>
+                <tr>
+                    <td>Weather Services</td>
+                    <td>Weather APIs</td>
+                    <td>Provide weather data</td>
+                </tr>
+                <tr>
+                    <td>Amazon</td>
+                    <td>AWS APIs</td>
+                    <td>Cloud computing services</td>
+                </tr>
+            </table>
+
+            <h2>API Architecture</h2>
+            <div class="diagram">┌─────────────────┐
+│   Client App    │
+│  (Request)      │
+└────────┬────────┘
+         │ (HTTP)
+         ▼
+┌─────────────────┐
+│   API Server    │
+│  (Processing)   │
+└────────┬────────┘
+         │ (HTTP)
+         ▼
+┌─────────────────┐
+│   Database      │
+│   /Resource     │
+└─────────────────┘</div>
+
+            <h2>Importance of APIs in Modern Development</h2>
+            <ul>
+                <li><strong>Modularity:</strong> Break applications into independent components</li>
+                <li><strong>Reusability:</strong> Use the same API across multiple applications</li>
+                <li><strong>Scalability:</strong> Handle large volumes of requests efficiently</li>
+                <li><strong>Security:</strong> Control access through authentication and authorization</li>
+                <li><strong>Flexibility:</strong> Update backend without affecting frontend</li>
+                <li><strong>Rapid Development:</strong> Accelerate development using pre-built APIs</li>
+            </ul>
+        </div>
+
+        <div class="section-break"></div>
+
+        <!-- Section 2: Request and Response -->
+        <div id="request-response">
+            <h1>Request and Response</h1>
+
+            <h2>HTTP Request Structure</h2>
+            <p>An HTTP request consists of three main components that are sent from the client to the server:</p>
+
+            <h3>1. Request Line</h3>
+            <ul>
+                <li>Contains the HTTP method, resource path, and HTTP version</li>
+                <li>Format: <code>METHOD /path/to/resource HTTP/1.1</code></li>
+                <li>Example: <code>GET /api/users HTTP/1.1</code></li>
+            </ul>
+
+            <h3>2. Headers</h3>
+            <p>Key-value pairs that provide additional information about the request:</p>
+            <table>
+                <tr>
+                    <th>Header</th>
+                    <th>Purpose</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td>Host</td>
+                    <td>The server address</td>
+                    <td>api.example.com</td>
+                </tr>
+                <tr>
+                    <td>Content-Type</td>
+                    <td>Format of request body</td>
+                    <td>application/json</td>
+                </tr>
+                <tr>
+                    <td>Authorization</td>
+                    <td>Authentication credentials</td>
+                    <td>Bearer token123</td>
+                </tr>
+                <tr>
+                    <td>User-Agent</td>
+                    <td>Client information</td>
+                    <td>Postman/10.0</td>
+                </tr>
+                <tr>
+                    <td>Accept</td>
+                    <td>Expected response format</td>
+                    <td>application/json</td>
+                </tr>
+            </table>
+
+            <h3>3. Request Body (Optional)</h3>
+            <ul>
+                <li>Contains data being sent to the server</li>
+                <li>Used primarily with POST, PUT, PATCH methods</li>
+                <li>Can be JSON, XML, form data, etc.</li>
+            </ul>
+
+            <h3>Example HTTP Request</h3>
+            <pre>POST /api/users HTTP/1.1
+Host: api.example.com
+Content-Type: application/json
+Authorization: Bearer token123
+User-Agent: Postman/10.0
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "age": 30
+}</pre>
+
+            <h2>HTTP Response Structure</h2>
+            <p>An HTTP response consists of three main components returned from the server to the client:</p>
+
+            <h3>1. Status Line</h3>
+            <ul>
+                <li>Contains HTTP version, status code, and status message</li>
+                <li>Format: <code>HTTP/1.1 200 OK</code></li>
+                <li>Example: <code>HTTP/1.1 201 Created</code></li>
+            </ul>
+
+            <h3>2. Response Headers</h3>
+            <p>Metadata about the response:</p>
+            <table>
+                <tr>
+                    <th>Header</th>
+                    <th>Purpose</th>
+                </tr>
+                <tr>
+                    <td>Content-Type</td>
+                    <td>Format of response body</td>
+                </tr>
+                <tr>
+                    <td>Content-Length</td>
+                    <td>Size of response body</td>
+                </tr>
+                <tr>
+                    <td>Server</td>
+                    <td>Server information</td>
+                </tr>
+                <tr>
+                    <td>Set-Cookie</td>
+                    <td>Cookies to store on client</td>
+                </tr>
+                <tr>
+                    <td>Cache-Control</td>
+                    <td>Caching instructions</td>
+                </tr>
+            </table>
+
+            <h3>3. Response Body (Optional)</h3>
+            <ul>
+                <li>Contains the actual data returned by the server</li>
+                <li>Format depends on Content-Type header</li>
+            </ul>
+
+            <h3>Example HTTP Response</h3>
+            <pre>HTTP/1.1 201 Created
+Content-Type: application/json
+Content-Length: 156
+Server: Apache/2.4.1
+Set-Cookie: sessionid=abc123; Path=/
+
+{
+  "id": 1,
+  "name": "John Doe",
+  "email": "john@example.com",
+  "age": 30,
+  "created_at": "2024-01-15T10:30:00Z"
+}</pre>
+
+            <h2>Request-Response Cycle</h2>
+            <div class="diagram">Client                          Server
+  │                               │
+  │ 1. Send Request               │
+  ├──────────────────────────────>│
+  │                               │
+  │                    2. Process │
+  │                               │
+  │    3. Send Response           │
+  │<──────────────────────────────┤
+  │                               │</div>
+
+            <h2>Common Content Types</h2>
+            <table>
+                <tr>
+                    <th>Content-Type</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td>application/json</td>
+                    <td>JSON format</td>
+                    <td>{"key": "value"}</td>
+                </tr>
+                <tr>
+                    <td>application/xml</td>
+                    <td>XML format</td>
+                    <td>&lt;root&gt;&lt;key&gt;value&lt;/key&gt;&lt;/root&gt;</td>
+                </tr>
+                <tr>
+                    <td>text/plain</td>
+                    <td>Plain text</td>
+                    <td>Hello World</td>
+                </tr>
+                <tr>
+                    <td>text/html</td>
+                    <td>HTML format</td>
+                    <td>&lt;html&gt;...&lt;/html&gt;</td>
+                </tr>
+                <tr>
+                    <td>application/x-www-form-urlencoded</td>
+                    <td>Form data</td>
+                    <td>key1=value1&key2=value2</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="section-break"></div>
+
+        <!-- Section 3: HTTP Methods -->
+        <div id="http-methods">
+            <h1>HTTP Methods</h1>
+            <p>HTTP methods (also called HTTP verbs) specify the action to be performed on a resource. Each method has specific semantics and use cases in REST APIs.</p>
+
+            <h2>Main HTTP Methods</h2>
+
+            <h3>1. GET - Retrieve Data</h3>
+            <div class="highlight-box">
+                <strong>Purpose:</strong> Retrieve data from the server
+            </div>
+            <p><strong>Characteristics:</strong></p>
+            <ul>
+                <li>Safe (doesn't modify data)</li>
+                <li>Idempotent (multiple calls produce same result)</li>
+                <li>No request body</li>
+                <li>Cacheable</li>
+            </ul>
+            <p><strong>Common Status Codes:</strong> 200 (OK), 404 (Not Found), 400 (Bad Request)</p>
+            <p><strong>Example:</strong></p>
+            <pre>GET /api/users/1 HTTP/1.1
+Host: api.example.com</pre>
+
+            <h3>2. POST - Create Resource</h3>
+            <div class="highlight-box">
+                <strong>Purpose:</strong> Create a new resource on the server
+            </div>
+            <p><strong>Characteristics:</strong></p>
+            <ul>
+                <li>Not safe (modifies data)</li>
+                <li>Not idempotent</li>
+                <li>Contains request body</li>
+                <li>Not cacheable</li>
+            </ul>
+            <p><strong>Common Status Codes:</strong> 201 (Created), 400 (Bad Request), 409 (Conflict)</p>
+            <p><strong>Example:</strong></p>
+            <pre>POST /api/users HTTP/1.1
+Host: api.example.com
+Content-Type: application/json
+
+{
+  "name": "Jane Doe",
+  "email": "jane@example.com"
+}</pre>
+
+            <h3>3. PUT - Replace Resource</h3>
+            <div class="highlight-box">
+                <strong>Purpose:</strong> Replace an entire resource with new data
+            </div>
+            <p><strong>Characteristics:</strong></p>
+            <ul>
+                <li>Not safe</li>
+                <li>Idempotent</li>
+                <li>Contains request body</li>
+                <li>Replaces entire resource</li>
+            </ul>
+            <p><strong>Common Status Codes:</strong> 200 (OK), 204 (No Content), 400 (Bad Request), 404 (Not Found)</p>
+
+            <h3>4. PATCH - Partial Update</h3>
+            <div class="highlight-box">
+                <strong>Purpose:</strong> Partially update a resource
+            </div>
+            <p><strong>Characteristics:</strong></p>
+            <ul>
+                <li>Not safe</li>
+                <li>Can be idempotent (depends on implementation)</li>
+                <li>Contains request body</li>
+                <li>Updates only specified fields</li>
+            </ul>
+
+            <h3>5. DELETE - Remove Resource</h3>
+            <div class="highlight-box">
+                <strong>Purpose:</strong> Remove a resource from the server
+            </div>
+            <p><strong>Characteristics:</strong></p>
+            <ul>
+                <li>Not safe</li>
+                <li>Idempotent</li>
+                <li>No request body</li>
+                <li>Removes entire resource</li>
+            </ul>
+
+            <h3>6. HEAD - Retrieve Headers</h3>
+            <p>Like GET but only retrieves headers, not the body. Useful for checking resource existence without downloading.</p>
+
+            <h3>7. OPTIONS - Describe Options</h3>
+            <p>Describe the communication options for a resource. Returns allowed methods in the <code>Allow</code> header.</p>
+
+            <h2>HTTP Methods Comparison</h2>
+            <table>
+                <tr>
+                    <th>Method</th>
+                    <th>Purpose</th>
+                    <th>Safe</th>
+                    <th>Idempotent</th>
+                    <th>Body</th>
+                    <th>Cacheable</th>
+                </tr>
+                <tr>
+                    <td>GET</td>
+                    <td>Retrieve</td>
+                    <td><span class="check">✓</span></td>
+                    <td><span class="check">✓</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="check">✓</span></td>
+                </tr>
+                <tr>
+                    <td>POST</td>
+                    <td>Create</td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="check">✓</span></td>
+                    <td><span class="cross">✗</span></td>
+                </tr>
+                <tr>
+                    <td>PUT</td>
+                    <td>Replace</td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="check">✓</span></td>
+                    <td><span class="check">✓</span></td>
+                    <td><span class="cross">✗</span></td>
+                </tr>
+                <tr>
+                    <td>PATCH</td>
+                    <td>Partial Update</td>
+                    <td><span class="cross">✗</span></td>
+                    <td>?</td>
+                    <td><span class="check">✓</span></td>
+                    <td><span class="cross">✗</span></td>
+                </tr>
+                <tr>
+                    <td>DELETE</td>
+                    <td>Delete</td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="check">✓</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                </tr>
+            </table>
+
+            <h2>Best Practices for HTTP Methods</h2>
+            <div class="success-box">
+                <ul>
+                    <li><strong>Use GET</strong> for retrieving data only</li>
+                    <li><strong>Use POST</strong> when creating new resources</li>
+                    <li><strong>Use PUT</strong> for complete resource replacement</li>
+                    <li><strong>Use PATCH</strong> for partial updates</li>
+                    <li><strong>Use DELETE</strong> for removing resources</li>
+                    <li><strong>Avoid using GET</strong> to modify data (use POST, PUT, PATCH instead)</li>
+                    <li><strong>Always use appropriate method</strong> for security and REST compliance</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section-break"></div>
+
+        <!-- Section 4: HTTP Status Codes -->
+        <div id="status-codes">
+            <h1>HTTP Status Codes</h1>
+            <p>HTTP status codes indicate the result of an HTTP request. They are grouped into five categories based on the first digit.</p>
+
+            <h2>Status Code Categories</h2>
+
+            <h3>1xx - Informational Responses</h3>
+            <p>Request received and processing continues. Rarely used in modern APIs.</p>
+            <table>
+                <tr>
+                    <th>Code</th>
+                    <th>Message</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>100</td>
+                    <td>Continue</td>
+                    <td>Continue with request</td>
+                </tr>
+                <tr>
+                    <td>101</td>
+                    <td>Switching Protocols</td>
+                    <td>Protocol upgrade</td>
+                </tr>
+            </table>
+
+            <h3>2xx - Successful Responses</h3>
+            <p>Request was successful and server returned the expected result.</p>
+            <table>
+                <tr>
+                    <th>Code</th>
+                    <th>Message</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>200</td>
+                    <td>OK</td>
+                    <td>Request successful, data returned</td>
+                </tr>
+                <tr>
+                    <td>201</td>
+                    <td>Created</td>
+                    <td>Resource created successfully</td>
+                </tr>
+                <tr>
+                    <td>202</td>
+                    <td>Accepted</td>
+                    <td>Request accepted for processing</td>
+                </tr>
+                <tr>
+                    <td>204</td>
+                    <td>No Content</td>
+                    <td>Request successful, no content to return</td>
+                </tr>
+            </table>
+
+            <h3>3xx - Redirection</h3>
+            <p>Additional action needed to complete request.</p>
+            <table>
+                <tr>
+                    <th>Code</th>
+                    <th>Message</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>301</td>
+                    <td>Moved Permanently</td>
+                    <td>Resource moved permanently</td>
+                </tr>
+                <tr>
+                    <td>302</td>
+                    <td>Found</td>
+                    <td>Resource temporarily moved</td>
+                </tr>
+                <tr>
+                    <td>304</td>
+                    <td>Not Modified</td>
+                    <td>Resource not modified since last request</td>
+                </tr>
+            </table>
+
+            <h3>4xx - Client Error</h3>
+            <p>Request contains error or cannot be fulfilled by server.</p>
+            <table>
+                <tr>
+                    <th>Code</th>
+                    <th>Message</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>400</td>
+                    <td>Bad Request</td>
+                    <td>Invalid request syntax or parameters</td>
+                </tr>
+                <tr>
+                    <td>401</td>
+                    <td>Unauthorized</td>
+                    <td>Authentication required or failed</td>
+                </tr>
+                <tr>
+                    <td>403</td>
+                    <td>Forbidden</td>
+                    <td>Authenticated but not authorized</td>
+                </tr>
+                <tr>
+                    <td>404</td>
+                    <td>Not Found</td>
+                    <td>Resource not found</td>
+                </tr>
+                <tr>
+                    <td>405</td>
+                    <td>Method Not Allowed</td>
+                    <td>HTTP method not allowed for resource</td>
+                </tr>
+                <tr>
+                    <td>409</td>
+                    <td>Conflict</td>
+                    <td>Request conflicts with current state</td>
+                </tr>
+                <tr>
+                    <td>429</td>
+                    <td>Too Many Requests</td>
+                    <td>Rate limit exceeded</td>
+                </tr>
+            </table>
+
+            <h3>5xx - Server Error</h3>
+            <p>Server failed to fulfill a valid request.</p>
+            <table>
+                <tr>
+                    <th>Code</th>
+                    <th>Message</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>500</td>
+                    <td>Internal Server Error</td>
+                    <td>Generic server error</td>
+                </tr>
+                <tr>
+                    <td>501</td>
+                    <td>Not Implemented</td>
+                    <td>Functionality not implemented</td>
+                </tr>
+                <tr>
+                    <td>502</td>
+                    <td>Bad Gateway</td>
+                    <td>Invalid response from upstream server</td>
+                </tr>
+                <tr>
+                    <td>503</td>
+                    <td>Service Unavailable</td>
+                    <td>Server temporarily unavailable</td>
+                </tr>
+                <tr>
+                    <td>504</td>
+                    <td>Gateway Timeout</td>
+                    <td>Upstream server timeout</td>
+                </tr>
+            </table>
+
+            <h2>Understanding Status Code Ranges</h2>
+            <div class="example-box">
+                <strong>200-299:</strong> Success! Request worked as expected<br>
+                <strong>300-399:</strong> Redirect! More action needed<br>
+                <strong>400-499:</strong> Client error! Check your request<br>
+                <strong>500-599:</strong> Server error! Issue with the server
+            </div>
+
+            <h2>Status Code Best Practices</h2>
+            <ul>
+                <li>Return <strong>201</strong> for successful POST (resource created)</li>
+                <li>Return <strong>204</strong> for successful DELETE or PATCH with no content</li>
+                <li>Return <strong>400</strong> for validation errors</li>
+                <li>Return <strong>401</strong> for missing authentication</li>
+                <li>Return <strong>403</strong> for authorization failures</li>
+                <li>Return <strong>404</strong> only if resource truly doesn't exist</li>
+                <li>Return <strong>429</strong> when rate limits are exceeded</li>
+                <li>Return <strong>5xx</strong> only for actual server errors</li>
+            </ul>
+        </div>
+
+        <div class="section-break"></div>
+
+        <!-- Section 5: Postman -->
+        <div id="postman">
+            <h1>API Testing Tools - Postman</h1>
+
+            <h2>What is Postman?</h2>
+            <p><strong>Postman</strong> is the leading collaboration platform for API development and testing. It provides comprehensive tools for:</p>
+            <ul>
+                <li>Building and testing APIs</li>
+                <li>Documenting API specifications</li>
+                <li>Monitoring API performance</li>
+                <li>Collaborating with teams</li>
+                <li>Automating API testing</li>
+            </ul>
+
+            <h2>Why Use Postman?</h2>
+            <div class="success-box">
+                <ul>
+                    <li>✓ User-friendly interface - No coding required for basic testing</li>
+                    <li>✓ Supports all HTTP methods - GET, POST, PUT, PATCH, DELETE, etc.</li>
+                    <li>✓ Collections & Environments - Organize requests and manage variables</li>
+                    <li>✓ Automated testing - Write scripts and run test suites</li>
+                    <li>✓ Collaboration - Share collections with team members</li>
+                    <li>✓ Pre-built integrations - Jenkins, GitHub, Slack, etc.</li>
+                    <li>✓ Monitoring - Track API performance over time</li>
+                    <li>✓ Mock servers - Create fake endpoints for testing</li>
+                    <li>✓ API documentation - Auto-generate from requests</li>
+                </ul>
+            </div>
+
+            <h2>Installing Postman</h2>
+
+            <h3>Option 1: Desktop Application</h3>
+            <ol>
+                <li>Visit <strong>postman.com/downloads/</strong></li>
+                <li>Download for Windows, macOS, or Linux</li>
+                <li>Follow installation wizard</li>
+                <li>Sign up or login with email</li>
+            </ol>
+
+            <h3>Option 2: Web Application</h3>
+            <ol>
+                <li>Go to <strong>web.postman.co</strong></li>
+                <li>Sign up for free account</li>
+                <li>Access directly from browser</li>
+            </ol>
+
+            <h2>Postman Interface Overview</h2>
+            <div class="diagram">┌─────────────────────────────────────────────────┐
+│  Postman Menu & Search Bar                      │
+├──────────────────────────────────────────────────┤
+│          │                                       │
+│ Sidebar  │ Request Builder    │  Response Panel │
+│ (Left)   │    (Center)        │    (Right)      │
+│          │                    │                 │
+│ Collections│ Headers           │ Status: 200 OK  │
+│ History  │ Body              │ Response Body   │
+│ Env      │ Params            │ Response Headers│
+│          │                    │ Response Time   │
+└──────────────────────────────────────────────────┘</div>
+
+            <h2>Creating Your First Request</h2>
+
+            <h3>Step 1: Open Postman</h3>
+            <ul>
+                <li>Launch the application or web version</li>
+                <li>Create a new request (Ctrl+Alt+N or Cmd+Shift+N)</li>
+            </ul>
+
+            <h3>Step 2: Set HTTP Method</h3>
+            <ul>
+                <li>Click the method dropdown (default: GET)</li>
+                <li>Select appropriate method (GET, POST, etc.)</li>
+            </ul>
+
+            <h3>Step 3: Enter Request URL</h3>
+            <ul>
+                <li>Type the API endpoint in the URL field</li>
+                <li>Example: <code>https://jsonplaceholder.typicode.com/users/1</code></li>
+            </ul>
+
+            <h3>Step 4: Add Headers (if needed)</h3>
+            <ul>
+                <li>Click on "Headers" tab</li>
+                <li>Add key-value pairs</li>
+                <li>Example: Key: <code>Content-Type</code>, Value: <code>application/json</code></li>
+            </ul>
+
+            <h3>Step 5: Add Body (for POST/PUT/PATCH)</h3>
+            <ul>
+                <li>Click on "Body" tab</li>
+                <li>Select format (JSON recommended)</li>
+                <li>Enter request data</li>
+            </ul>
+
+            <h3>Step 6: Send Request</h3>
+            <ul>
+                <li>Click blue "Send" button</li>
+                <li>View response in right panel</li>
+            </ul>
+
+            <h3>Step 7: Analyze Response</h3>
+            <ul>
+                <li>Check Status Code</li>
+                <li>Review Response Body</li>
+                <li>Examine Response Headers</li>
+                <li>Check Response Time</li>
+            </ul>
+
+            <h2>Request Builder Components</h2>
+
+            <h3>Method Dropdown</h3>
+            <p>Select HTTP method (GET, POST, PUT, PATCH, DELETE, etc.)</p>
+
+            <h3>URL Input Field</h3>
+            <p>Enter the complete API endpoint. Can include query parameters. Supports variables (e.g., <code>{{baseUrl}}/users</code>)</p>
+
+            <h3>Params Tab</h3>
+            <p>Add query parameters without typing in URL. Key-value pairs automatically appended to URL.</p>
+
+            <h3>Headers Tab</h3>
+            <p>Add request headers. Pre-defined headers available. Common headers auto-suggested.</p>
+
+            <h3>Body Tab</h3>
+            <p>Choose format for request body:</p>
+            <ul>
+                <li><strong>Form-data:</strong> File uploads and form submissions</li>
+                <li><strong>URL-encoded:</strong> Form submissions with key-value pairs</li>
+                <li><strong>JSON:</strong> Structured data in JSON format</li>
+                <li><strong>XML:</strong> Structured data in XML format</li>
+                <li><strong>Raw:</strong> Plain text or custom format</li>
+                <li><strong>Binary:</strong> Binary file content</li>
+            </ul>
+
+            <h3>Auth Tab</h3>
+            <p>Select authentication method:</p>
+            <ul>
+                <li><strong>No Auth:</strong> No authentication</li>
+                <li><strong>Basic Auth:</strong> Username and password</li>
+                <li><strong>Bearer Token:</strong> API key or JWT token</li>
+                <li><strong>OAuth 2.0:</strong> OAuth authentication flow</li>
+                <li><strong>API Key:</strong> API key in header or query parameter</li>
+            </ul>
+
+            <h3>Pre-request Script</h3>
+            <p>JavaScript code executed before sending request. Set variables, validate data, etc.</p>
+            <pre>pm.environment.set("timestamp", new Date().getTime());</pre>
+
+            <h3>Tests Tab</h3>
+            <p>JavaScript code executed after receiving response. Validate response content, status codes, etc.</p>
+            <pre>pm.test("Status code is 200", function() {
+  pm.response.to.have.status(200);
+});</pre>
+
+            <h2>Response Analysis</h2>
+
+            <h3>Status Code</h3>
+            <p>Top-left shows status code and message. Color-coded: Green (2xx), Yellow (3xx), Red (4xx/5xx)</p>
+
+            <h3>Response Body</h3>
+            <p>Displays response content in Pretty (JSON), Raw, Preview, or Visualize format</p>
+
+            <h3>Response Headers</h3>
+            <p>Shows all response headers. Useful for debugging CORS and caching issues</p>
+
+            <h3>Response Time</h3>
+            <p>Shows request duration in milliseconds. Useful for performance testing</p>
+
+            <h3>Response Size</h3>
+            <p>Shows total response size in bytes</p>
+
+            <h3>Cookies</h3>
+            <p>Displays cookies set by server. Can be used in subsequent requests</p>
+
+            <h2>Collections: Organizing Requests</h2>
+            <p>Collections group related requests together, making it easy to organize and reuse.</p>
+
+            <h3>Creating a Collection</h3>
+            <ol>
+                <li>Click "Collections" in sidebar</li>
+                <li>Click "+" icon</li>
+                <li>Name your collection (e.g., "User API")</li>
+                <li>Click "Create"</li>
+            </ol>
+
+            <h3>Collection Structure Example</h3>
+            <pre>Users API
+├── GET /users (List all users)
+├── GET /users/:id (Get user by ID)
+├── POST /users (Create new user)
+├── PUT /users/:id (Update user)
+├── PATCH /users/:id (Partial update)
+└── DELETE /users/:id (Delete user)</pre>
+
+            <h2>Environments: Managing Variables</h2>
+            <p>Environments allow you to use variables instead of hardcoding values, making it easy to switch between development, staging, and production.</p>
+
+            <h3>Creating an Environment</h3>
+            <ol>
+                <li>Click "Environments" icon (left sidebar)</li>
+                <li>Click "+" to create new environment</li>
+                <li>Name it (e.g., "Development")</li>
+                <li>Add variables: Key: <code>baseUrl</code>, Value: <code>https://dev-api.example.com</code></li>
+                <li>Click "Save"</li>
+            </ol>
+
+            <h3>Using Variables in Requests</h3>
+            <p>Use double curly braces: <code>{{variableName}}</code></p>
+            <ul>
+                <li>Example URL: <code>{{baseUrl}}/users</code></li>
+                <li>Example header: <code>Authorization: Bearer {{token}}</code></li>
+            </ul>
+
+            <h3>Environment Comparison</h3>
+            <table>
+                <tr>
+                    <th>Environment</th>
+                    <th>Base URL</th>
+                    <th>API Key</th>
+                </tr>
+                <tr>
+                    <td>Development</td>
+                    <td>http://localhost:3000</td>
+                    <td>dev-key-123</td>
+                </tr>
+                <tr>
+                    <td>Staging</td>
+                    <td>https://staging-api.example.com</td>
+                    <td>staging-key-456</td>
+                </tr>
+                <tr>
+                    <td>Production</td>
+                    <td>https://api.example.com</td>
+                    <td>prod-key-789</td>
+                </tr>
+            </table>
+
+            <h2>Writing Tests in Postman</h2>
+            <p>Tests validate that responses meet expected criteria.</p>
+
+            <h3>Check Status Code</h3>
+            <pre>pm.test("Status code is 200", function () {
+    pm.response.to.have.status(200);
+});</pre>
+
+            <h3>Check Response Body Content</h3>
+            <pre>pm.test("Response contains user name", function () {
+    pm.expect(pm.response.json().name).to.equal("John Doe");
+});</pre>
+
+            <h3>Check Response Headers</h3>
+            <pre>pm.test("Content-Type is JSON", function () {
+    pm.response.to.have.header("content-type");
+});</pre>
+
+            <h3>Validate JSON Structure</h3>
+            <pre>pm.test("Response has required fields", function () {
+    var jsonData = pm.response.json();
+    pm.expect(jsonData).to.have.property("id");
+    pm.expect(jsonData).to.have.property("email");
+});</pre>
+
+            <h3>Check Array Length</h3>
+            <pre>pm.test("Response contains 10 items", function () {
+    pm.expect(pm.response.json()).to.have.lengthOf(10);
+});</pre>
+
+            <h3>Validate Data Type</h3>
+            <pre>pm.test("User ID is a number", function () {
+    pm.expect(pm.response.json().id).to.be.a("number");
+});</pre>
+
+            <h2>Postman Best Practices</h2>
+
+            <h3>Organization</h3>
+            <div class="success-box">
+                <ul>
+                    <li>✓ Use clear, descriptive request names</li>
+                    <li>✓ Organize requests in folders by feature/endpoint</li>
+                    <li>✓ Use meaningful collection names</li>
+                    <li>✓ Add descriptions to requests</li>
+                </ul>
+            </div>
+
+            <h3>Variable Management</h3>
+            <div class="success-box">
+                <ul>
+                    <li>✓ Use variables instead of hardcoding values</li>
+                    <li>✓ Create separate environments for different stages</li>
+                    <li>✓ Store sensitive data (API keys, tokens) in environment</li>
+                    <li>✓ Never commit sensitive values to version control</li>
+                </ul>
+            </div>
+
+            <h3>Testing</h3>
+            <div class="success-box">
+                <ul>
+                    <li>✓ Write tests for all critical endpoints</li>
+                    <li>✓ Test both success and error scenarios</li>
+                    <li>✓ Validate response structure, not just values</li>
+                    <li>✓ Test boundary conditions and edge cases</li>
+                </ul>
+            </div>
+
+            <h3>Security</h3>
+            <div class="warning-box">
+                <ul>
+                    <li>⚠ Use HTTPS for all API calls</li>
+                    <li>⚠ Never hardcode API keys or passwords</li>
+                    <li>⚠ Use environment variables for sensitive data</li>
+                    <li>⚠ Be careful when sharing collections (redact sensitive info)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="section-break"></div>
+        <div>
+            <h1>Summary</h1>
+
+            <h2>Key Takeaways</h2>
+
+            <h3>1. API Basics</h3>
+            <p>APIs enable communication between applications and are essential for modern software development. They provide a standardized way for different systems to exchange data and functionality.</p>
+
+            <h3>2. Request/Response</h3>
+            <p>Every API interaction consists of a request sent to a server and a response returned by the server, each with specific structure including headers, body, and status information.</p>
+
+            <h3>3. HTTP Methods</h3>
+            <p>Different methods (GET, POST, PUT, PATCH, DELETE) are used for different operations, following REST conventions. Each method has specific semantics and should be used appropriately.</p>
+
+            <h3>4. Status Codes</h3>
+            <p>HTTP status codes indicate the result of a request using three-digit codes grouped into five categories (1xx, 2xx, 3xx, 4xx, 5xx) that help identify success, redirection, client errors, and server errors.</p>
+
+            <h3>5. Postman</h3>
+            <p>Postman is a powerful tool for testing, developing, and documenting APIs with features like collections, environments, automated testing, and team collaboration capabilities.</p>
+
+            <h2>Next Steps</h2>
+            <ol>
+                <li>Install Postman and explore its features</li>
+                <li>Create your own collections for APIs you work with</li>
+                <li>Write comprehensive tests for your APIs</li>
+                <li>Set up environments for different deployment stages</li>
+                <li>Share collections with your team</li>
+                <li>Explore advanced features like monitors, mock servers, and integrations</li>
+            </ol>
+
+            <h2>Additional Resources</h2>
+            <ul>
+                <li>Postman Official Documentation: learning.postman.com</li>
+                <li>HTTP/1.1 Specification: tools.ietf.org/html/rfc7231</li>
+                <li>REST API Design Best Practices: restfulapi.net</li>
+                <li>API Testing Best Practices: postman.com/api-testing</li>
+                <li>JSONPlaceholder (Free API for Testing): jsonplaceholder.typicode.com</li>
+            </ul>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>API Testing Training Guide</strong></p>
+            <p>Version 1.0 | 2024</p>
+            <p>Training Duration: 3-4 hours recommended | Audience: Beginners to Intermediate Level</p>
+        </div>
+    </div>
+</body>
+</html>
